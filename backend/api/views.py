@@ -1,9 +1,9 @@
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.serializers import DataSerializer
 from api.models import Data
+from api.serializers import DataSerializer
 
 
 class DataViewSet(viewsets.ModelViewSet):
