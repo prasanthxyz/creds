@@ -49,7 +49,6 @@ INSTALLED_APPS = [
 
     # Local apps
     'api',
-    'frontend',
 ]
 
 MIDDLEWARE = [
