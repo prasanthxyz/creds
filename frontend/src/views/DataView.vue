@@ -1,5 +1,10 @@
 <template>
   <div>
+    Secret Key: <input id="secretkey" /><br />
+    Plain Text: <input id="plaintext" /><br />
+    Cipher Text: <input id="ciphertext" /><br />
+    <input type="button" @click="encrypt()" value="Encrypt" />
+    <input type="button" @click="decrypt()" value="Decrypt" />
     <p>
       <router-link to="/login">Logout</router-link>
     </p>
@@ -17,6 +22,7 @@
 </template>
 
 <script>
+import CryptoJS from 'crypto-js';
 import { webService, HttpMethod } from '../_services';
 
 export default {
@@ -47,6 +53,21 @@ export default {
         console.log(data);
       });
     },
+    encrypt() {
+      const secretKey = document.getElementById('secretkey').value;
+      const plainText = document.getElementById('plaintext').value;
+      // Encrypt
+      const cipherText = CryptoJS.AES.encrypt(plainText, secretKey).toString();
+      document.getElementById('ciphertext').value = cipherText;
+    },
+    decrypt() {
+      const secretKey = document.getElementById('secretkey').value;
+      const cipherText = document.getElementById('ciphertext').value;
+      // Decrypt
+      const bytes  = CryptoJS.AES.decrypt(cipherText, secretKey);
+      const plainText = bytes.toString(CryptoJS.enc.Utf8);
+      document.getElementById('plaintext').value = plainText;
+    }
   },
 };
 </script>
