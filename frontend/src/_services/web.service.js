@@ -5,7 +5,7 @@ import { userService } from './user.service';
 export const webService = {
   req,
   handleResponse,
-}
+};
 
 export const HttpMethod = {
   GET: 'GET',
