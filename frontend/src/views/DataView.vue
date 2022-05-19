@@ -1,54 +1,52 @@
 <template>
-  <div v-if="isDataLoadFailed">
-    Error in loading data.
-  </div>
-  <div v-else-if="!isDataLoaded">
-    Loading...
-  </div>
-  <div v-else>
-    <div v-if="editMode">
-      <input type="button" value="View" @click="setEditMode(false)" />
+  <q-page>
+    <div v-if="isDataLoadFailed">
+      Error in loading data.
+    </div>
+    <div v-else-if="!isDataLoaded">
+      Loading...
     </div>
     <div v-else>
-      <input type="button" value="Edit" @click="setEditMode(true)" />
-    </div>
-    <br />
-    <br />
+      <div class="row" style="margin-top:20px">
+        <div class="row col">
+          <div class="col">
+            <q-input rounded outlined type="text" label="Secret Key" v-model="_secretKey" for="secretKey" />
+          </div>
+          <div class="col">
+            <q-btn size="lg" push icon="lock_open" color="amber" @click="decryptDataAndLoadIntoSections()"
+              :disabled="!_secretKey" />
+            <q-btn size="lg" push icon="lock" color="red" @click="lockSections()" :disabled="sections.length === 0"
+              :style="'display:' + ((sections.length === 0) ? 'none' : 'inline-flex')" />
+          </div>
+        </div>
+        <div v-if="editMode" class="col">
+          <q-btn size="lg" push icon="visibility" color="primary" @click="setEditMode(false)" />
+        </div>
+        <div v-else class="col">
+          <q-btn size="lg" push icon="edit" color="primary" @click="setEditMode(true)" />
+        </div>
+      </div>
 
-    <div v-if="!editMode && sections.length === 0">
-      No valid sections found.
-    </div>
-    <div v-else>
-      <div v-for="(sectionInfo, index) in sections">
-        <SectionDisplay v-if="!editMode" :sectionInfo="sectionInfo" />
-        <SectionForm v-if="editMode" :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
-          @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
+      <div v-if="!editMode && sections.length === 0">
+        No valid sections found.
+      </div>
+      <div v-else>
+        <div v-for="(sectionInfo, index) in sections">
+          <SectionDisplay v-if="!editMode" :sectionInfo="sectionInfo" />
+          <SectionForm v-if="editMode" :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
+            @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
+        </div>
+      </div>
+      <div v-if="editMode">
+        <div v-for="(sectionInfo, index) in newSections">
+          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
+            v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
+            @newSectionAdded="postNewSection" />
+        </div>
+        <q-btn color="primary" size="md" label="+" @click="addNewSection()" />
       </div>
     </div>
-    <div v-if="editMode">
-      <div v-for="(sectionInfo, index) in newSections">
-        <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
-          v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
-          @newSectionAdded="postNewSection" />
-      </div>
-      <input type="button" value="+" @click="addNewSection()" />
-    </div>
-
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <div>
-      Secret Key:
-      <input type="text" id="secretKey" />
-      &nbsp;&nbsp;
-      <input type="button" value="Decrypt" @click="decryptDataAndLoadIntoSections()" />
-      <p>
-        <router-link to="/login">Logout</router-link>
-      </p>
-    </div>
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -63,6 +61,7 @@ export default {
       _data: [], // backend data
       sections: [], // decrypted _data
       newSections: [], // to hold new sections not yet added to backend
+      _secretKey: '', // for q-input model binding
       editMode: false,
       isDataLoaded: false,
       isDataLoadFailed: false,
@@ -210,6 +209,15 @@ export default {
       return this._data.findIndex(obj => {
         return obj.id === id;
       });
+    },
+    /**
+     * Locks the currently opened sections
+     * Resets this._secretKey to clear secret key input
+     */
+    lockSections() {
+      this._secretKey = '';
+      document.getElementById('secretKey').value = '';
+      this.decryptDataAndLoadIntoSections();
     },
   },
   components: { SectionDisplay, SectionForm },
