@@ -11,7 +11,7 @@
               outlined
               type="password"
               label="Secret Key"
-              v-model="_secretKey"
+              v-model="inputSecretKey"
               for="secretKey"
             />
           </div>
@@ -24,7 +24,7 @@
               label="Unlock"
               color="primary"
               @click="decryptDataAndLoadIntoSections()"
-              :disabled="!_secretKey"
+              :disabled="!inputSecretKey"
             />
           </div>
           <div class="row col items-center" v-else>
@@ -76,6 +76,7 @@
         <div
           class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6"
           v-for="(sectionInfo, index) in newSections"
+          :key="index"
         >
           <SectionForm
             :sectionInfo="sectionInfo"
@@ -89,26 +90,30 @@
         </div>
       </div>
       <div class="row" v-if="sections.length !== 0">
-        <div
-          v-if="!editMode"
-          class="col-xs-12 col-md-6 col-lg-4"
-          v-for="(sectionInfo, index) in sections"
-        >
-          <SectionDisplay :sectionInfo="sectionInfo" />
-        </div>
-        <div
-          v-else
-          class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6"
-          v-for="(sectionInfo, index) in sections"
-        >
-          <SectionForm
-            :sectionInfo="sectionInfo"
-            @sectionDeleted="deleteSection"
-            :sectionIndex="index"
-            @sectionUpdated="updateSection"
-            @newSectionDeleted="deleteNewSection"
-          />
-        </div>
+        <template v-if="!editMode">
+          <div
+            class="col-xs-12 col-md-6 col-lg-4"
+            v-for="(sectionInfo, index) in sections"
+            :key="index"
+          >
+            <SectionDisplay :sectionInfo="sectionInfo" />
+          </div>
+        </template>
+        <template v-else>
+          <div
+            class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6"
+            v-for="(sectionInfo, index) in sections"
+            :key="-1 * index"
+          >
+            <SectionForm
+              :sectionInfo="sectionInfo"
+              @sectionDeleted="deleteSection"
+              :sectionIndex="index"
+              @sectionUpdated="updateSection"
+              @newSectionDeleted="deleteNewSection"
+            />
+          </div>
+        </template>
       </div>
     </div>
   </q-page>
@@ -123,10 +128,10 @@ import SectionForm from "../components/SectionForm.vue";
 export default {
   data() {
     return {
-      _data: [], // backend data
-      sections: [], // decrypted _data
+      backendData: [], // backend data
+      sections: [], // decrypted backendData
       newSections: [], // to hold new sections not yet added to backend
-      _secretKey: "", // for q-input model binding
+      inputSecretKey: "", // for q-input model binding
       editMode: false,
       isDataLoaded: false,
       isDataLoadFailed: false,
@@ -137,14 +142,14 @@ export default {
   },
   methods: {
     /**
-     * Loads data from the backend and stores into this._data.
+     * Loads data from the backend and stores into this.backendData.
      * Sets isDataLoaded and isDataLoadFailed accordingly.
      */
     loadData() {
       webService
         .req(HttpMethod.GET, "/data/")
         .then((data) => {
-          this._data = data;
+          this.backendData = data;
           this.isDataLoaded = true;
           this.isDataLoadFailed = false;
           console.log("Data Loaded");
@@ -156,14 +161,14 @@ export default {
         });
     },
     /**
-     * Decrypts this._data and loads it into this.sections.
+     * Decrypts this.backendData and loads it into this.sections.
      * Each section will have 'id', 'name' and 'creds'.
      * 'id' is the section ID in DB.
      * 'name' will be an encrypted string.
      * 'creds' will be a list of lists, each list has two encrypted string each.
      */
     decryptDataAndLoadIntoSections() {
-      this.sections = _crypto.decryptDataToSectionsList(this._data);
+      this.sections = _crypto.decryptDataToSectionsList(this.backendData);
     },
     /**
      * Sets this.editMode with the provided value.
@@ -184,7 +189,7 @@ export default {
     },
     /**
      * Encrypts the given sectionInfo, posts to backend to create new section.
-     * Updates this._data if successful.
+     * Updates this.backendData if successful.
      * Removes the entry from given index in this.newSections if successful.
      * @param {Object} sectionInfo: data to create new section
      * @param {Integer} index: index in this.newSections
@@ -197,7 +202,7 @@ export default {
           .then((data) => {
             console.log(data); // TODO: Show something else here like a pop-up
             this.newSections.splice(index, 1);
-            this._data.push(data);
+            this.backendData.push(data);
             this.decryptDataAndLoadIntoSections();
           })
           .catch((error) => {
@@ -210,7 +215,7 @@ export default {
     /**
      * Encrypts the given sectionInfo, posts to backend to update the section.
      * The section is found from given index in this.sections
-     * Updates this._data if successful.
+     * Updates this.backendData if successful.
      * @param {Integer} index: index in this.sections
      * @param {Object} updatedSectionInfo: new data for the section
      */
@@ -224,10 +229,10 @@ export default {
           .then((data) => {
             console.log(data); // TODO: Show something else here like a pop-up
 
-            // Update this._data with the new content
+            // Update this.backendData with the new content
             const _index = this.findIndex(id);
             if (_index !== -1) {
-              this._data[_index].content = content;
+              this.backendData[_index].content = content;
               this.decryptDataAndLoadIntoSections();
             }
           })
@@ -240,7 +245,7 @@ export default {
     },
     /**
      * Sends delete request to backend for the section in the given index in this.sections.
-     * Removes the entry from this._data if successful.
+     * Removes the entry from this.backendData if successful.
      * @param {Integer} index: index in this.sections
      */
     deleteSection(index) {
@@ -251,10 +256,10 @@ export default {
         .then((data) => {
           console.log(data); // TODO: Show something else here like a pop-up
 
-          // Remove the entry from this._data
+          // Remove the entry from this.backendData
           const _index = this.findIndex(id);
           if (_index !== -1) {
-            this._data.splice(_index, 1);
+            this.backendData.splice(_index, 1);
             this.decryptDataAndLoadIntoSections();
           }
         })
@@ -270,21 +275,21 @@ export default {
       this.newSections.splice(index, 1);
     },
     /**
-     * Finds and returns the index of given section in this._data.
+     * Finds and returns the index of given section in this.backendData.
      * The section is identified by the id param.
      * @param {Integer} id: Section ID in DB
      */
     findIndex(id) {
-      return this._data.findIndex((obj) => {
+      return this.backendData.findIndex((obj) => {
         return obj.id === id;
       });
     },
     /**
      * Locks the currently opened sections
-     * Resets this._secretKey to clear secret key input
+     * Resets this.inputSecretKey to clear secret key input
      */
     lockSections() {
-      this._secretKey = "";
+      this.inputSecretKey = "";
       document.getElementById("secretKey").value = "";
       this.decryptDataAndLoadIntoSections();
     },

@@ -62,7 +62,7 @@ export default {
     this.returnUrl = this.$route.query.returnUrl || "/";
   },
   methods: {
-    handleSubmit(e) {
+    handleSubmit() {
       this.error = "";
       this.submitted = true;
       const { username, password } = this;

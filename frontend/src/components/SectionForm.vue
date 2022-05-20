@@ -7,10 +7,14 @@
         outlined
         type="text"
         label="Section Name"
-        v-model="sectionInfo.name"
+        v-model="displaySectionInfo.name"
       />
     </div>
-    <div v-for="(cred, index) in sectionInfo.creds" class="row items-end">
+    <div
+      v-for="(cred, index) in displaySectionInfo.creds"
+      class="row items-end"
+      :key="index"
+    >
       <div class="row col-11">
         <div class="col-6">
           <q-input label="key" type="text" v-model="cred[0]" dense />
@@ -76,30 +80,40 @@ export default {
   data() {
     return {
       originalSectionInfo: {},
+      displaySectionInfo: {},
     };
   },
   mounted() {
     this.originalSectionInfo = _.cloneDeep(this.sectionInfo);
+    this.displaySectionInfo = _.cloneDeep(this.sectionInfo);
   },
   methods: {
     handleSave() {
       if (this.isNewSection) {
-        this.$emit("newSectionAdded", this.sectionInfo, this.sectionIndex);
+        this.$emit(
+          "newSectionAdded",
+          this.displaySectionInfo,
+          this.sectionIndex
+        );
         return;
       }
 
-      this.sectionInfo["creds"] = _dataValidator.removeInvalidEntries(
-        this.sectionInfo
+      this.displaySectionInfo["creds"] = _dataValidator.removeInvalidEntries(
+        this.displaySectionInfo
       )["creds"];
       if (this.isSectionUpdated()) {
-        this.$emit("sectionUpdated", this.sectionIndex, this.sectionInfo);
+        this.$emit(
+          "sectionUpdated",
+          this.sectionIndex,
+          this.displaySectionInfo
+        );
       }
     },
     handleDelete() {
       if (
         !confirm(
           `Are you sure you want to delete ${
-            this.sectionInfo.name || "this new section"
+            this.displaySectionInfo.name || "this new section"
           }?`
         )
       ) {
@@ -114,13 +128,13 @@ export default {
       this.$emit("sectionDeleted", this.sectionIndex);
     },
     createSectionEntry() {
-      this.sectionInfo.creds.push(["", ""]);
+      this.displaySectionInfo.creds.push(["", ""]);
     },
     deleteSectionEntry(index) {
-      this.sectionInfo.creds.splice(index, 1);
+      this.displaySectionInfo.creds.splice(index, 1);
     },
     isSectionUpdated() {
-      return !_.isEqual(this.sectionInfo, this.originalSectionInfo);
+      return !_.isEqual(this.displaySectionInfo, this.originalSectionInfo);
     },
   },
 };

@@ -30,7 +30,9 @@ function decryptDataToSectionsList(data) {
         sectionInfo["id"] = sectionData["id"];
         sections.push(sectionInfo);
       }
-    } catch (_error) {}
+    } catch (_error) {
+      // ignore decryption errors.
+    }
   });
   return sections;
 }
