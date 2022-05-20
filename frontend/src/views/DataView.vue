@@ -10,7 +10,7 @@
       <div class="row">
         <div class="row col-9 items-center">
           <div class="col-xs-6 col-sm-8 col-md-10 q-mr-xs">
-            <q-input rounded outlined type="text" label="Secret Key" v-model="_secretKey" for="secretKey" />
+            <q-input rounded outlined type="password" label="Secret Key" v-model="_secretKey" for="secretKey" />
           </div>
           <div class="row col items-center" v-if="sections.length === 0">
             <q-icon class="col" size="xl" name="lock" color="green" />

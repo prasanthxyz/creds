@@ -15,7 +15,9 @@ from pathlib import Path
 import environ
 
 # Django-Environ config
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False),
+)
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,9 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+if not DEBUG:
+    ALLOWED_HOSTS.append(env('FRONTEND_HOST'))
 
 
 # Application definition
@@ -90,7 +94,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+    },
+}
+
+if env('DATABASE_ENGINE') == 'mssql':
+    DATABASES['default'].update({
+        'ENGINE': env('DATABASE_ENGINE'),
         'NAME': env('DATABASE_NAME'),
         'USER': env('DATABASE_USER'),
         'PASSWORD': env('DATABASE_PASS'),
@@ -99,8 +110,7 @@ DATABASES = {
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
-    },
-}
+    })
 
 
 # Password validation
@@ -150,4 +160,4 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+CORS_ORIGIN_WHITELIST = [env('FRONTEND_URL')]
