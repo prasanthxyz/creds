@@ -33,9 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
-if not DEBUG:
-    ALLOWED_HOSTS.append(env('BACKEND_HOST'))
+ALLOWED_HOSTS = [env('BACKEND_HOST')]
 
 
 # Application definition
