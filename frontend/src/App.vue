@@ -1,10 +1,8 @@
 <script setup>
 import { RouterView } from "vue-router";
-import ReloadPWA from "./views/ReloadPWA.vue";
 </script>
 
 <template>
-  <ReloadPWA />
   <q-layout view="hhh lpR fFf">
     <q-header elevated>
       <q-toolbar>
