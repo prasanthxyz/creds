@@ -9,7 +9,7 @@
     <div class="column" style="width:100%" v-else>
       <div class="row">
         <div class="row col-9 items-center">
-          <div class="col-10 q-mr-xs">
+          <div class="col-xs-6 col-sm-8 col-md-10 q-mr-xs">
             <q-input rounded outlined type="text" label="Secret Key" v-model="_secretKey" for="secretKey" />
           </div>
           <div class="row col items-center" v-if="sections.length === 0">
@@ -36,18 +36,22 @@
         No valid sections found.
       </div>
       <div class="row" v-else>
-        <div class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
-          <SectionDisplay v-if="!editMode" :sectionInfo="sectionInfo" />
-          <SectionForm v-if="editMode" :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
+        <div v-if="!editMode" class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
+          <SectionDisplay :sectionInfo="sectionInfo" />
+        </div>
+        <div v-else class="col-xs-12" v-for="(sectionInfo, index) in sections">
+          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
         </div>
       </div>
       <div class="row" v-if="editMode">
-        <div v-for="(sectionInfo, index) in newSections">
+        <div class="col-xs-12" v-for="(sectionInfo, index) in newSections">
           <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
             @newSectionAdded="postNewSection" />
         </div>
+      </div>
+      <div class="row" v-if="editMode">
         <q-btn color="primary" size="md" label="+" @click="addNewSection()" />
       </div>
     </div>
