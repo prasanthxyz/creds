@@ -1,22 +1,23 @@
 <template>
-  <div class="column q-mt-xl">
+  <div class="column q-mt-xl q-pa-sm">
     <div class="row">
-      <q-input class="col-xs-11 col-sm-9 col-md-7 col-lg-5 col-5" rounded outlined type="text" label="Section Name"
-        v-model="sectionInfo.name" />
+      <q-input class="col-12" rounded outlined type="text" label="Section Name" v-model="sectionInfo.name" />
     </div>
     <div v-for="(cred, index) in sectionInfo.creds" class="row items-end">
-      <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2 col-2">
-        <q-input label="key" type="text" v-model="cred[0]" dense />
-      </div>
-      <div class="col-xs-5 col-sm-4 col-md-3 col-lg-2 col-2">
-        <q-input label="value" type="text" v-model="cred[1]" dense />
+      <div class="row col-11">
+        <div class="col-6">
+          <q-input label="key" type="text" v-model="cred[0]" dense />
+        </div>
+        <div class="col-6">
+          <q-input label="value" type="text" v-model="cred[1]" dense />
+        </div>
       </div>
       <div class="col-1">
         <q-btn push flat color="black" icon="delete" size="md" @click="deleteSectionEntry(index)" />
       </div>
     </div>
     <div class="row q-mt-md">
-      <div class="row col-xs-11 col-sm-9 col-md-7 col-lg-5 col-5 justify-between">
+      <div class="row col-12 justify-between">
         <div>
           <q-btn class="q-mr-md" color="primary" size="sm" label="Add entry" @click="createSectionEntry()" />
           <q-btn v-if="isSectionUpdated()" color="secondary" size="sm" @click="handleSave()" label="Save" />

@@ -35,24 +35,24 @@
       <div class="row q-mt-md" v-if="!editMode && sections.length === 0">
         No valid sections found.
       </div>
-      <div class="row" v-else>
-        <div v-if="!editMode" class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
-          <SectionDisplay :sectionInfo="sectionInfo" />
-        </div>
-        <div v-else class="col-xs-12" v-for="(sectionInfo, index) in sections">
-          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
-            @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
-        </div>
+      <div class="row q-mt-xl justify-center" v-if="editMode">
+        <q-btn color="primary" size="md" label="add new section" @click="addNewSection()" />
       </div>
       <div class="row" v-if="editMode">
-        <div class="col-xs-12" v-for="(sectionInfo, index) in newSections">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6" v-for="(sectionInfo, index) in newSections">
           <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
             @newSectionAdded="postNewSection" />
         </div>
       </div>
-      <div class="row" v-if="editMode">
-        <q-btn color="primary" size="md" label="+" @click="addNewSection()" />
+      <div class="row" v-if="sections.length !== 0">
+        <div v-if="!editMode" class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
+          <SectionDisplay :sectionInfo="sectionInfo" />
+        </div>
+        <div v-else class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6" v-for="(sectionInfo, index) in sections">
+          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
+            @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
+        </div>
       </div>
     </div>
   </q-page>
