@@ -1,11 +1,10 @@
-import CryptoJS from 'crypto-js';
-import { _dataValidator } from '.';
+import CryptoJS from "crypto-js";
+import { _dataValidator } from ".";
 
 export const _crypto = {
   decryptDataToSectionsList,
   encryptSectionInfoToContent,
 };
-
 
 /**
  * Decrypts data and returns a list of valid sections from it.
@@ -21,14 +20,17 @@ function decryptDataToSectionsList(data) {
   data.forEach((sectionData) => {
     try {
       // Decrypt sectionData.content and parse it into sectionInfo object
-      const sectionInfo = JSON.parse(decrypt(sectionData['content'], document.getElementById('secretKey').value));
+      const sectionInfo = JSON.parse(
+        decrypt(
+          sectionData["content"],
+          document.getElementById("secretKey").value
+        )
+      );
       if (_dataValidator.isValidSection(sectionInfo)) {
-        sectionInfo['id'] = sectionData['id'];
+        sectionInfo["id"] = sectionData["id"];
         sections.push(sectionInfo);
       }
-    }
-    catch (_error) { }
-
+    } catch (_error) {}
   });
   return sections;
 }
@@ -42,11 +44,14 @@ function decryptDataToSectionsList(data) {
  */
 function encryptSectionInfoToContent(sectionInfo) {
   if (!_dataValidator.isValidSection(sectionInfo, true)) {
-    throw new Error('Can\'t encrypt: sectionInfo object not valid.');
+    throw new Error("Can't encrypt: sectionInfo object not valid.");
   }
 
   sectionInfo = _dataValidator.removeInvalidEntries(sectionInfo);
-  return encrypt(JSON.stringify(sectionInfo), document.getElementById('secretKey').value);
+  return encrypt(
+    JSON.stringify(sectionInfo),
+    document.getElementById("secretKey").value
+  );
 }
 
 /**
@@ -57,7 +62,7 @@ function encryptSectionInfoToContent(sectionInfo) {
  */
 function encrypt(plainText, secretKey) {
   if (!secretKey) {
-    throw new Error('Invalid key.');
+    throw new Error("Invalid key.");
   }
   return CryptoJS.AES.encrypt(plainText, secretKey).toString();
 }

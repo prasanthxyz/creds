@@ -1,33 +1,62 @@
 <template>
   <q-page class="flex justify-center q-pa-md">
-    <div class="row" v-if="isDataLoadFailed">
-      Error in loading data.
-    </div>
-    <div class="row" v-else-if="!isDataLoaded">
-      Loading...
-    </div>
-    <div class="column" style="width:100%" v-else>
+    <div class="row" v-if="isDataLoadFailed">Error in loading data.</div>
+    <div class="row" v-else-if="!isDataLoaded">Loading...</div>
+    <div class="column" style="width: 100%" v-else>
       <div class="row">
         <div class="row col-9 items-center">
           <div class="col-xs-6 col-sm-8 col-md-10 q-mr-xs">
-            <q-input rounded outlined type="password" label="Secret Key" v-model="_secretKey" for="secretKey" />
+            <q-input
+              rounded
+              outlined
+              type="password"
+              label="Secret Key"
+              v-model="_secretKey"
+              for="secretKey"
+            />
           </div>
           <div class="row col items-center" v-if="sections.length === 0">
             <q-icon class="col" size="xl" name="lock" color="green" />
-            <q-btn class="col" size="md" push label="Unlock" color="primary" @click="decryptDataAndLoadIntoSections()"
-              :disabled="!_secretKey" />
+            <q-btn
+              class="col"
+              size="md"
+              push
+              label="Unlock"
+              color="primary"
+              @click="decryptDataAndLoadIntoSections()"
+              :disabled="!_secretKey"
+            />
           </div>
           <div class="row col items-center" v-else>
             <q-icon class="col" size="xl" name="lock_open" color="red" />
-            <q-btn class="col" size="md" push label="Lock" color="primary" @click="lockSections()" />
+            <q-btn
+              class="col"
+              size="md"
+              push
+              label="Lock"
+              color="primary"
+              @click="lockSections()"
+            />
           </div>
         </div>
         <div class="row col-3 justify-end">
           <div v-if="editMode">
-            <q-btn size="lg" push icon="visibility" color="primary" @click="setEditMode(false)" />
+            <q-btn
+              size="lg"
+              push
+              icon="visibility"
+              color="primary"
+              @click="setEditMode(false)"
+            />
           </div>
           <div v-else>
-            <q-btn size="lg" push icon="edit" color="primary" @click="setEditMode(true)" />
+            <q-btn
+              size="lg"
+              push
+              icon="edit"
+              color="primary"
+              @click="setEditMode(true)"
+            />
           </div>
         </div>
       </div>
@@ -36,22 +65,49 @@
         No valid sections found.
       </div>
       <div class="row q-mt-xl justify-center" v-if="editMode">
-        <q-btn color="primary" size="md" label="add new section" @click="addNewSection()" />
+        <q-btn
+          color="primary"
+          size="md"
+          label="add new section"
+          @click="addNewSection()"
+        />
       </div>
       <div class="row" v-if="editMode">
-        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6" v-for="(sectionInfo, index) in newSections">
-          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
-            v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
-            @newSectionAdded="postNewSection" />
+        <div
+          class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6"
+          v-for="(sectionInfo, index) in newSections"
+        >
+          <SectionForm
+            :sectionInfo="sectionInfo"
+            @sectionDeleted="deleteSection"
+            :sectionIndex="index"
+            v-bind:isNewSection="true"
+            @sectionUpdated="updateSection"
+            @newSectionDeleted="deleteNewSection"
+            @newSectionAdded="postNewSection"
+          />
         </div>
       </div>
       <div class="row" v-if="sections.length !== 0">
-        <div v-if="!editMode" class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
+        <div
+          v-if="!editMode"
+          class="col-xs-12 col-md-6 col-lg-4"
+          v-for="(sectionInfo, index) in sections"
+        >
           <SectionDisplay :sectionInfo="sectionInfo" />
         </div>
-        <div v-else class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6" v-for="(sectionInfo, index) in sections">
-          <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
-            @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
+        <div
+          v-else
+          class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-6"
+          v-for="(sectionInfo, index) in sections"
+        >
+          <SectionForm
+            :sectionInfo="sectionInfo"
+            @sectionDeleted="deleteSection"
+            :sectionIndex="index"
+            @sectionUpdated="updateSection"
+            @newSectionDeleted="deleteNewSection"
+          />
         </div>
       </div>
     </div>
@@ -59,10 +115,10 @@
 </template>
 
 <script>
-import { webService, HttpMethod } from '../_services';
-import { _crypto } from '../_helpers';
-import SectionDisplay from '../components/SectionDisplay.vue';
-import SectionForm from '../components/SectionForm.vue';
+import { webService, HttpMethod } from "../_services";
+import { _crypto } from "../_helpers";
+import SectionDisplay from "../components/SectionDisplay.vue";
+import SectionForm from "../components/SectionForm.vue";
 
 export default {
   data() {
@@ -70,7 +126,7 @@ export default {
       _data: [], // backend data
       sections: [], // decrypted _data
       newSections: [], // to hold new sections not yet added to backend
-      _secretKey: '', // for q-input model binding
+      _secretKey: "", // for q-input model binding
       editMode: false,
       isDataLoaded: false,
       isDataLoadFailed: false,
@@ -85,14 +141,15 @@ export default {
      * Sets isDataLoaded and isDataLoadFailed accordingly.
      */
     loadData() {
-      webService.req(HttpMethod.GET, '/data/')
-        .then(data => {
+      webService
+        .req(HttpMethod.GET, "/data/")
+        .then((data) => {
           this._data = data;
           this.isDataLoaded = true;
           this.isDataLoadFailed = false;
           console.log("Data Loaded");
         })
-        .catch(error => {
+        .catch((error) => {
           this.isDataLoaded = true;
           this.isDataLoadFailed = true;
           console.error(error.message);
@@ -121,8 +178,8 @@ export default {
      */
     addNewSection() {
       this.newSections.push({
-        'name': '',
-        'creds': [],
+        name: "",
+        creds: [],
       });
     },
     /**
@@ -135,14 +192,15 @@ export default {
     postNewSection(sectionInfo, index) {
       try {
         const content = _crypto.encryptSectionInfoToContent(sectionInfo);
-        webService.req(HttpMethod.POST, "/data/", { "content": content })
-          .then(data => {
+        webService
+          .req(HttpMethod.POST, "/data/", { content: content })
+          .then((data) => {
             console.log(data); // TODO: Show something else here like a pop-up
             this.newSections.splice(index, 1);
             this._data.push(data);
             this.decryptDataAndLoadIntoSections();
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(error.message); // TODO: Show something else here like a pop-up
           });
       } catch (error) {
@@ -157,12 +215,13 @@ export default {
      * @param {Object} updatedSectionInfo: new data for the section
      */
     updateSection(index, updatedSectionInfo) {
-      const id = this.sections[index]['id'];
+      const id = this.sections[index]["id"];
 
       try {
         const content = _crypto.encryptSectionInfoToContent(updatedSectionInfo);
-        webService.req(HttpMethod.PATCH, `/data/${id}/`, { "content": content })
-          .then(data => {
+        webService
+          .req(HttpMethod.PATCH, `/data/${id}/`, { content: content })
+          .then((data) => {
             console.log(data); // TODO: Show something else here like a pop-up
 
             // Update this._data with the new content
@@ -172,7 +231,7 @@ export default {
               this.decryptDataAndLoadIntoSections();
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(error.message); // TODO: Show something else here like a pop-up
           });
       } catch (error) {
@@ -185,10 +244,11 @@ export default {
      * @param {Integer} index: index in this.sections
      */
     deleteSection(index) {
-      const id = this.sections[index]['id'];
+      const id = this.sections[index]["id"];
 
-      webService.req(HttpMethod.DELETE, `/data/${id}/`)
-        .then(data => {
+      webService
+        .req(HttpMethod.DELETE, `/data/${id}/`)
+        .then((data) => {
           console.log(data); // TODO: Show something else here like a pop-up
 
           // Remove the entry from this._data
@@ -198,7 +258,7 @@ export default {
             this.decryptDataAndLoadIntoSections();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error.message); // TODO: Show something else here like a pop-up
         });
     },
@@ -215,7 +275,7 @@ export default {
      * @param {Integer} id: Section ID in DB
      */
     findIndex(id) {
-      return this._data.findIndex(obj => {
+      return this._data.findIndex((obj) => {
         return obj.id === id;
       });
     },
@@ -224,8 +284,8 @@ export default {
      * Resets this._secretKey to clear secret key input
      */
     lockSections() {
-      this._secretKey = '';
-      document.getElementById('secretKey').value = '';
+      this._secretKey = "";
+      document.getElementById("secretKey").value = "";
       this.decryptDataAndLoadIntoSections();
     },
   },

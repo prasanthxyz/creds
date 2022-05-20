@@ -13,12 +13,14 @@ export const _dataValidator = {
  * @returns {Boolean} whether the sectionInfo is valid or not
  */
 function isValidSection(sectionInfo, dontCheckCreds = false) {
-  if (!sectionInfo['name']) {
+  if (!sectionInfo["name"]) {
     console.log("name issue", sectionInfo);
     return false;
   }
 
-  if (Object.prototype.toString.call(sectionInfo['creds']) !== '[object Array]') {
+  if (
+    Object.prototype.toString.call(sectionInfo["creds"]) !== "[object Array]"
+  ) {
     console.log("creds issue");
     return false;
   }
@@ -27,7 +29,7 @@ function isValidSection(sectionInfo, dontCheckCreds = false) {
     return true;
   }
 
-  for (const cred of sectionInfo['creds']) {
+  for (const cred of sectionInfo["creds"]) {
     if (!isValidEntry(cred)) {
       console.log("entry issue", cred);
       return false;
@@ -45,8 +47,8 @@ function isValidSection(sectionInfo, dontCheckCreds = false) {
  */
 function removeInvalidEntries(sectionInfo) {
   return {
-    'name': sectionInfo['name'],
-    'creds': sectionInfo['creds'].filter((entry) => isValidEntry(entry)),
+    name: sectionInfo["name"],
+    creds: sectionInfo["creds"].filter((entry) => isValidEntry(entry)),
   };
 }
 
@@ -58,7 +60,7 @@ function removeInvalidEntries(sectionInfo) {
  * @returns {Boolean} whether the entryData is valid or not
  */
 function isValidEntry(entryData) {
-  if (Object.prototype.toString.call(entryData) !== '[object Array]') {
+  if (Object.prototype.toString.call(entryData) !== "[object Array]") {
     return false;
   }
   if (!entryData || entryData.length != 2) {

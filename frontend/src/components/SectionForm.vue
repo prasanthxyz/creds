@@ -1,7 +1,14 @@
 <template>
   <div class="column q-mt-xl q-pa-sm">
     <div class="row">
-      <q-input class="col-12" rounded outlined type="text" label="Section Name" v-model="sectionInfo.name" />
+      <q-input
+        class="col-12"
+        rounded
+        outlined
+        type="text"
+        label="Section Name"
+        v-model="sectionInfo.name"
+      />
     </div>
     <div v-for="(cred, index) in sectionInfo.creds" class="row items-end">
       <div class="row col-11">
@@ -13,17 +20,41 @@
         </div>
       </div>
       <div class="col-1">
-        <q-btn push flat color="black" icon="delete" size="md" @click="deleteSectionEntry(index)" />
+        <q-btn
+          push
+          flat
+          color="black"
+          icon="delete"
+          size="md"
+          @click="deleteSectionEntry(index)"
+        />
       </div>
     </div>
     <div class="row q-mt-md">
       <div class="row col-12 justify-between">
         <div>
-          <q-btn class="q-mr-md" color="primary" size="sm" label="Add entry" @click="createSectionEntry()" />
-          <q-btn v-if="isSectionUpdated()" color="secondary" size="sm" @click="handleSave()" label="Save" />
+          <q-btn
+            class="q-mr-md"
+            color="primary"
+            size="sm"
+            label="Add entry"
+            @click="createSectionEntry()"
+          />
+          <q-btn
+            v-if="isSectionUpdated()"
+            color="secondary"
+            size="sm"
+            @click="handleSave()"
+            label="Save"
+          />
         </div>
         <div>
-          <q-btn color="red-10" size="sm" @click="handleDelete()" label="Delete Section" />
+          <q-btn
+            color="red-10"
+            size="sm"
+            @click="handleDelete()"
+            label="Delete Section"
+          />
         </div>
       </div>
     </div>
@@ -31,12 +62,17 @@
 </template>
 
 <script>
-import { _dataValidator } from '../_helpers';
-import _ from 'lodash';
+import { _dataValidator } from "../_helpers";
+import _ from "lodash";
 
 export default {
-  props: ['sectionInfo', 'isNewSection', 'sectionIndex'],
-  emits: ['newSectionAdded', 'sectionUpdated', 'sectionDeleted', 'newSectionDeleted'],
+  props: ["sectionInfo", "isNewSection", "sectionIndex"],
+  emits: [
+    "newSectionAdded",
+    "sectionUpdated",
+    "sectionDeleted",
+    "newSectionDeleted",
+  ],
   data() {
     return {
       originalSectionInfo: {},
@@ -48,26 +84,34 @@ export default {
   methods: {
     handleSave() {
       if (this.isNewSection) {
-        this.$emit('newSectionAdded', this.sectionInfo, this.sectionIndex);
+        this.$emit("newSectionAdded", this.sectionInfo, this.sectionIndex);
         return;
       }
 
-      this.sectionInfo['creds'] = _dataValidator.removeInvalidEntries(this.sectionInfo)['creds'];
+      this.sectionInfo["creds"] = _dataValidator.removeInvalidEntries(
+        this.sectionInfo
+      )["creds"];
       if (this.isSectionUpdated()) {
-        this.$emit('sectionUpdated', this.sectionIndex, this.sectionInfo);
+        this.$emit("sectionUpdated", this.sectionIndex, this.sectionInfo);
       }
     },
     handleDelete() {
-      if (!confirm(`Are you sure you want to delete ${this.sectionInfo.name || 'this new section'}?`)) {
+      if (
+        !confirm(
+          `Are you sure you want to delete ${
+            this.sectionInfo.name || "this new section"
+          }?`
+        )
+      ) {
         return;
       }
 
       if (this.isNewSection) {
-        this.$emit('newSectionDeleted', this.sectionIndex);
+        this.$emit("newSectionDeleted", this.sectionIndex);
         return;
       }
 
-      this.$emit('sectionDeleted', this.sectionIndex);
+      this.$emit("sectionDeleted", this.sectionIndex);
     },
     createSectionEntry() {
       this.sectionInfo.creds.push(["", ""]);
@@ -78,6 +122,6 @@ export default {
     isSectionUpdated() {
       return !_.isEqual(this.sectionInfo, this.originalSectionInfo);
     },
-  }
+  },
 };
 </script>
