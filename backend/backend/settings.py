@@ -35,7 +35,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 if not DEBUG:
-    ALLOWED_HOSTS.append(env('FRONTEND_HOST'))
+    ALLOWED_HOSTS.append(env('BACKEND_HOST'))
 
 
 # Application definition
