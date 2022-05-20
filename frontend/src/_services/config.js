@@ -1,5 +1,5 @@
 const config = {
-    'apiUrl': 'http://localhost:8000',
+  apiUrl: "https://keymaster-backend.azurewebsites.net",
 };
 
 export default config;
