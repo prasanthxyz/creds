@@ -8,16 +8,18 @@
     </div>
     <div class="column" style="width:100%" v-else>
       <div class="row">
-        <div class="row col-9">
-          <div class="col-10 q-mr-md">
+        <div class="row col-9 items-center">
+          <div class="col-10 q-mr-xs">
             <q-input rounded outlined type="text" label="Secret Key" v-model="_secretKey" for="secretKey" />
           </div>
-          <div class="col" v-if="sections.length === 0">
-            <q-btn size="lg" push icon="lock_open" color="red" @click="decryptDataAndLoadIntoSections()"
+          <div class="row col items-center" v-if="sections.length === 0">
+            <q-icon class="col" size="xl" name="lock" color="green" />
+            <q-btn class="col" size="md" push label="Unlock" color="primary" @click="decryptDataAndLoadIntoSections()"
               :disabled="!_secretKey" />
           </div>
-          <div class="col" v-else>
-            <q-btn size="lg" push icon="lock" color="black" @click="lockSections()" />
+          <div class="row col items-center" v-else>
+            <q-icon class="col" size="xl" name="lock_open" color="red" />
+            <q-btn class="col" size="md" push label="Lock" color="primary" @click="lockSections()" />
           </div>
         </div>
         <div class="row col-3 justify-end">
@@ -30,11 +32,11 @@
         </div>
       </div>
 
-      <div class="row" v-if="!editMode && sections.length === 0">
+      <div class="row q-mt-md" v-if="!editMode && sections.length === 0">
         No valid sections found.
       </div>
       <div class="row" v-else>
-        <div v-for="(sectionInfo, index) in sections">
+        <div class="col-xs-12 col-md-6 col-lg-4" v-for="(sectionInfo, index) in sections">
           <SectionDisplay v-if="!editMode" :sectionInfo="sectionInfo" />
           <SectionForm v-if="editMode" :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />

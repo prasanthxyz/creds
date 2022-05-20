@@ -1,11 +1,7 @@
 <template>
   <div class="column">
-    <div class="col-12 text-h4 q-mt-lg q-pb-sm">{{ sectionInfo.name }}</div>
-    <div class="row">
-      <div class="col-12 col-md-5 col-sm-6">
-        <q-table :columns="columns" :rows="rows" hide-header hide-bottom />
-      </div>
-    </div>
+    <div class="text-h4 q-mt-lg q-ml-sm">{{ sectionInfo.name }}</div>
+    <q-table class="q-ma-sm" :columns="columns" :rows="rows" hide-header hide-bottom />
   </div>
 </template>
 

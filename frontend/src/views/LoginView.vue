@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex items-center column q-mt-xl">
-    <div class="row text-h4 q-pb-md">
+    <div class="row text-h3 q-pb-md">
       Login
     </div>
     <div class="column" style="width:35%">
@@ -70,7 +70,9 @@ export default {
         .then(
           () => router.push(this.returnUrl),
           error => {
-            this.error = error;
+            this.error = (error === "Bad Request")
+              ? "Invalid credentials."
+              : "Something went wrong.";
             this.loading = false;
           }
         );
