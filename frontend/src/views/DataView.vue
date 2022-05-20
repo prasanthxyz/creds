@@ -16,7 +16,7 @@
             />
           </div>
           <div class="row col items-center" v-if="sections.length === 0">
-            <q-icon class="col" size="xl" name="lock" color="green" />
+            <q-icon class="col" size="xl" name="lock" color="dark" />
             <q-btn
               class="col"
               size="md"
@@ -25,6 +25,7 @@
               color="primary"
               @click="decryptDataAndLoadIntoSections()"
               :disabled="!inputSecretKey"
+              aria-label="Unlock data"
             />
           </div>
           <div class="row col items-center" v-else>
@@ -36,6 +37,7 @@
               label="Lock"
               color="primary"
               @click="lockSections()"
+              aria-label="Lock data"
             />
           </div>
         </div>
@@ -47,6 +49,7 @@
               icon="visibility"
               color="primary"
               @click="setEditMode(false)"
+              aria-label="Switch to view mode"
             />
           </div>
           <div v-else>
@@ -56,6 +59,7 @@
               icon="edit"
               color="primary"
               @click="setEditMode(true)"
+              aria-label="Switch to edit mode"
             />
           </div>
         </div>
@@ -70,6 +74,7 @@
           size="md"
           label="add new section"
           @click="addNewSection()"
+          aria-label="Add a new section"
         />
       </div>
       <div class="row" v-if="editMode">

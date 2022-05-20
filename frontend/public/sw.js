@@ -1,5 +1,5 @@
 import { precacheAndRoute } from "workbox-precaching";
-import { clientsClaim } from 'workbox-core'
+import { clientsClaim } from "workbox-core";
 
 self.skipWaiting();
 clientsClaim();

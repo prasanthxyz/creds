@@ -7,7 +7,7 @@ import { RouterView } from "vue-router";
     <q-header elevated>
       <q-toolbar>
         <q-avatar>
-          <q-btn flat round dense icon="key" />
+          <q-btn flat round dense icon="key" aria-label="Avatar" />
         </q-avatar>
         <q-toolbar-title>Key Master</q-toolbar-title>
         <q-btn
@@ -16,6 +16,7 @@ import { RouterView } from "vue-router";
           round
           dense
           icon="logout"
+          aria-label="Log out"
         />
       </q-toolbar>
     </q-header>

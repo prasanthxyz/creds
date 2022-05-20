@@ -27,6 +27,7 @@
             label="Login"
             @click="handleSubmit"
             v-show="!loading"
+            aria-label="Login"
           />
           <img
             v-show="loading"

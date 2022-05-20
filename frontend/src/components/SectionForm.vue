@@ -31,6 +31,7 @@
           icon="delete"
           size="md"
           @click="deleteSectionEntry(index)"
+          aria-label="Delete section entry"
         />
       </div>
     </div>
@@ -43,6 +44,7 @@
             size="sm"
             label="Add entry"
             @click="createSectionEntry()"
+            aria-label="Create section entry"
           />
           <q-btn
             v-if="isSectionUpdated()"
@@ -50,6 +52,7 @@
             size="sm"
             @click="handleSave()"
             label="Save"
+            aria-label="Save section"
           />
         </div>
         <div>
@@ -58,6 +61,7 @@
             size="sm"
             @click="handleDelete()"
             label="Delete Section"
+            aria-label="Delete section"
           />
         </div>
       </div>
