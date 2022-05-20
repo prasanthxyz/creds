@@ -1,27 +1,33 @@
 <template>
-  <q-page>
-    <div>
-      <h2>Login</h2>
-      <form>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" v-model="username" name="username" class="form-control"
-            :class="{ 'is-invalid': submitted && !username }" />
-          <div v-show="submitted && !username" class="invalid-feedback">Username is required</div>
+  <q-page class="flex items-center column q-mt-xl">
+    <div class="row text-h4 q-pb-md">
+      Login
+    </div>
+    <div class="column" style="width:35%">
+      <div class="row">
+        <div class="col">
+          <q-input dense type="text" v-model="username" label="Username" />
         </div>
-        <div class="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" v-model="password" name="password" class="form-control"
-            :class="{ 'is-invalid': submitted && !password }" />
-          <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
+      </div>
+      <div class="row justify-end" v-show="submitted && !username">
+        Username is required
+      </div>
+      <div class="row q-mt-sm">
+        <div class="col">
+          <q-input dense type="password" v-model="password" label="Password" />
         </div>
-        <div class="form-group">
-          <q-btn color="primary" size="sm" :disabled="loading" label="Login" @click="handleSubmit" />
+      </div>
+      <div class="row justify-end" v-show="submitted && !password">
+        Password is required
+      </div>
+      <div class="row">
+        <div class="row col q-mt-lg justify-center">
+          <q-btn color="primary" size="sm" :disabled="loading" label="Login" @click="handleSubmit" v-show="!loading" />
           <img v-show="loading"
             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
         </div>
-        <div v-if="error" class="alert alert-danger">{{ error }}</div>
-      </form>
+      </div>
+      <div class="row justify-center q-mt-md" v-if="error">{{ error }}</div>
     </div>
   </q-page>
 </template>
@@ -50,6 +56,7 @@ export default {
   },
   methods: {
     handleSubmit(e) {
+      this.error = '';
       this.submitted = true;
       const { username, password } = this;
 

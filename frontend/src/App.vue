@@ -3,8 +3,8 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <q-layout>
-    <q-header>
+  <q-layout view="hhh lpR fFf">
+    <q-header elevated>
       <q-toolbar>
         <q-avatar>
           <q-btn flat round dense icon="key" />

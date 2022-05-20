@@ -1,43 +1,46 @@
 <template>
-  <q-page>
-    <div v-if="isDataLoadFailed">
+  <q-page class="flex justify-center q-pa-md">
+    <div class="row" v-if="isDataLoadFailed">
       Error in loading data.
     </div>
-    <div v-else-if="!isDataLoaded">
+    <div class="row" v-else-if="!isDataLoaded">
       Loading...
     </div>
-    <div v-else>
-      <div class="row" style="margin-top:20px">
-        <div class="row col">
-          <div class="col">
+    <div class="column" style="width:100%" v-else>
+      <div class="row">
+        <div class="row col-9">
+          <div class="col-10 q-mr-md">
             <q-input rounded outlined type="text" label="Secret Key" v-model="_secretKey" for="secretKey" />
           </div>
-          <div class="col">
-            <q-btn size="lg" push icon="lock_open" color="amber" @click="decryptDataAndLoadIntoSections()"
+          <div class="col" v-if="sections.length === 0">
+            <q-btn size="lg" push icon="lock_open" color="red" @click="decryptDataAndLoadIntoSections()"
               :disabled="!_secretKey" />
-            <q-btn size="lg" push icon="lock" color="red" @click="lockSections()" :disabled="sections.length === 0"
-              :style="'display:' + ((sections.length === 0) ? 'none' : 'inline-flex')" />
+          </div>
+          <div class="col" v-else>
+            <q-btn size="lg" push icon="lock" color="black" @click="lockSections()" />
           </div>
         </div>
-        <div v-if="editMode" class="col">
-          <q-btn size="lg" push icon="visibility" color="primary" @click="setEditMode(false)" />
-        </div>
-        <div v-else class="col">
-          <q-btn size="lg" push icon="edit" color="primary" @click="setEditMode(true)" />
+        <div class="row col-3 justify-end">
+          <div v-if="editMode">
+            <q-btn size="lg" push icon="visibility" color="primary" @click="setEditMode(false)" />
+          </div>
+          <div v-else>
+            <q-btn size="lg" push icon="edit" color="primary" @click="setEditMode(true)" />
+          </div>
         </div>
       </div>
 
-      <div v-if="!editMode && sections.length === 0">
+      <div class="row" v-if="!editMode && sections.length === 0">
         No valid sections found.
       </div>
-      <div v-else>
+      <div class="row" v-else>
         <div v-for="(sectionInfo, index) in sections">
           <SectionDisplay v-if="!editMode" :sectionInfo="sectionInfo" />
           <SectionForm v-if="editMode" :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection" />
         </div>
       </div>
-      <div v-if="editMode">
+      <div class="row" v-if="editMode">
         <div v-for="(sectionInfo, index) in newSections">
           <SectionForm :sectionInfo="sectionInfo" @sectionDeleted="deleteSection" :sectionIndex="index"
             v-bind:isNewSection="true" @sectionUpdated="updateSection" @newSectionDeleted="deleteNewSection"
