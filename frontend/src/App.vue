@@ -1,7 +1,3 @@
-<script setup>
-import { RouterView } from "vue-router";
-</script>
-
 <template>
   <q-layout view="hhh lpR fFf">
     <q-header elevated>
@@ -11,6 +7,7 @@ import { RouterView } from "vue-router";
         </q-avatar>
         <q-toolbar-title>Key Master</q-toolbar-title>
         <q-btn
+          v-show="!isPublicPath()"
           @click="$router.replace('/login')"
           flat
           round
@@ -25,3 +22,16 @@ import { RouterView } from "vue-router";
     </q-page-container>
   </q-layout>
 </template>
+
+<script>
+import { RouterView } from "vue-router";
+import { publicPages } from "./router";
+export default {
+  methods: {
+    isPublicPath() {
+      return publicPages.includes(this.$router.currentRoute.value.name);
+    },
+  },
+  components: [RouterView],
+};
+</script>

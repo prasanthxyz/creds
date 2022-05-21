@@ -3,6 +3,8 @@ import LoginView from "../views/LoginView.vue";
 import DataView from "../views/DataView.vue";
 import SignUpView from "../views/SignUpView.vue";
 
+export const publicPages = ["login", "signup"];
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,8 +33,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login", "/signup"];
-  const authRequired = !publicPages.includes(to.path);
+  const authRequired = !publicPages.includes(to.name);
   const loggedIn = localStorage.getItem("token");
 
   if (authRequired && !loggedIn) {
