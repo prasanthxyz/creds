@@ -18,8 +18,25 @@
       <div class="row justify-end text-red" v-show="submitted && !password">
         Password is required
       </div>
+      <div class="row q-mt-sm">
+        <div class="col">
+          <q-input
+            dense
+            type="password"
+            v-model="confirmPassword"
+            label="Confirm password"
+          />
+        </div>
+      </div>
+      <div
+        class="row justify-end text-red"
+        v-show="password && password != confirmPassword"
+      >
+        Should be same as the password
+      </div>
       <div class="row col q-mt-lg justify-between">
         <q-btn
+          style="width: 16em"
           color="secondary"
           size="sm"
           :disabled="loading"
@@ -29,6 +46,7 @@
           aria-label="Sign up"
         />
         <q-btn
+          style="width: 16em"
           color="primary"
           size="sm"
           :disabled="loading"
@@ -61,6 +79,7 @@ export default {
     return {
       username: "",
       password: "",
+      confirmPassword: "",
       submitted: false,
       loading: false,
       error: "",
@@ -77,7 +96,7 @@ export default {
       const { username, password } = this;
 
       // stop here if form is invalid
-      if (!(username && password)) {
+      if (!(username && password) || password != this.confirmPassword) {
         return;
       }
 
@@ -92,11 +111,7 @@ export default {
           router.push("/login");
         },
         (error) => {
-          if (
-            error &&
-            error.message &&
-            error.message.includes("Failed to fetch")
-          ) {
+          if (error && error.message) {
             this.error = "Something went wrong.";
           } else {
             this.error = error;

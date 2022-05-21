@@ -20,6 +20,7 @@
       </div>
       <div class="row col q-mt-lg justify-between">
         <q-btn
+          style="width: 16em"
           color="primary"
           size="sm"
           :disabled="loading"
@@ -29,13 +30,14 @@
           aria-label="Login"
         />
         <q-btn
+          style="width: 16em"
           color="secondary"
           size="sm"
           :disabled="loading"
-          label="Sign Up"
+          label="Go to sign up page"
           @click="gotoSignup"
           v-show="!loading"
-          aria-label="Sign up"
+          aria-label="Go to sign up page"
         />
       </div>
       <div class="row justify-center">
@@ -88,11 +90,7 @@ export default {
       userService.login(username, password).then(
         () => router.push(this.returnUrl),
         (error) => {
-          if (
-            error &&
-            error.message &&
-            error.message.includes("Failed to fetch")
-          ) {
+          if (error && error.message) {
             this.error = "Something went wrong.";
           } else {
             this.error = error;
