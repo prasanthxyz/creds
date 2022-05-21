@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import DataView from "../views/DataView.vue";
+import SignUpView from "../views/SignUpView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       name: "login",
       component: LoginView,
     },
+    {
+      path: "/signup",
+      name: "signup",
+      component: SignUpView,
+    },
     // otherwise redirect to /
     {
       path: "/:catchAll(.*)",
@@ -25,7 +31,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/login"];
+  const publicPages = ["/login", "/signup"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("token");
 

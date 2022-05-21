@@ -4,6 +4,7 @@ import { webService } from "./web.service";
 export const userService = {
   login,
   logout,
+  signup,
 };
 
 function login(username, password) {
@@ -27,4 +28,16 @@ function login(username, password) {
 function logout() {
   // remove token from local storage to log user out
   localStorage.removeItem("token");
+}
+
+function signup(username, password) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  };
+
+  return fetch(`${config.apiUrl}/users/`, requestOptions).then(
+    webService.handleResponse
+  );
 }

@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex items-center column q-mt-xl">
-    <div class="row text-h3 q-pb-md">Login</div>
+    <div class="row text-h3 q-pb-md">Sign Up</div>
     <div class="column" style="width: 35%">
       <div class="row">
         <div class="col">
@@ -20,22 +20,22 @@
       </div>
       <div class="row col q-mt-lg justify-between">
         <q-btn
-          color="primary"
-          size="sm"
-          :disabled="loading"
-          label="Login"
-          @click="loginSubmit"
-          v-show="!loading"
-          aria-label="Login"
-        />
-        <q-btn
           color="secondary"
           size="sm"
           :disabled="loading"
           label="Sign Up"
-          @click="gotoSignup"
+          @click="signupSubmit"
           v-show="!loading"
           aria-label="Sign up"
+        />
+        <q-btn
+          color="primary"
+          size="sm"
+          :disabled="loading"
+          label="Go to login page"
+          @click="gotoLogin"
+          v-show="!loading"
+          aria-label="Go to login page"
         />
       </div>
       <div class="row justify-center">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { Notify } from "quasar";
 import router from "../router";
 import { userService } from "../_services";
 
@@ -62,19 +63,15 @@ export default {
       password: "",
       submitted: false,
       loading: false,
-      returnUrl: "",
       error: "",
     };
   },
   created() {
     // reset login status
     userService.logout();
-
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.$route.query.returnUrl || "/";
   },
   methods: {
-    loginSubmit() {
+    signupSubmit() {
       this.error = "";
       this.submitted = true;
       const { username, password } = this;
@@ -85,8 +82,15 @@ export default {
       }
 
       this.loading = true;
-      userService.login(username, password).then(
-        () => router.push(this.returnUrl),
+      userService.signup(username, password).then(
+        (data) => {
+          Notify.create({
+            type: "positive",
+            position: "top",
+            message: "Successfully created user: '" + data.username + "'.",
+          });
+          router.push("/login");
+        },
         (error) => {
           if (
             error &&
@@ -101,8 +105,8 @@ export default {
         }
       );
     },
-    gotoSignup() {
-      router.push("/signup");
+    gotoLogin() {
+      router.push("/login");
     },
   },
 };

@@ -43,6 +43,11 @@ function handleResponse(response) {
         location.reload(true);
       }
 
+      if (data && data.non_field_errors) {
+        return Promise.reject(data.non_field_errors[0]);
+      } else if (data && data.username) {
+        return Promise.reject(data.username[0]);
+      }
       const error = (data && data.message) || response.statusText;
       return Promise.reject(error);
     }
