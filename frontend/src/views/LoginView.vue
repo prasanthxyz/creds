@@ -18,27 +18,31 @@
       <div class="row justify-end text-red" v-show="submitted && !password">
         Password is required
       </div>
-      <div class="row col q-mt-lg justify-between">
-        <q-btn
-          style="width: 16em"
-          color="primary"
-          size="sm"
-          :disabled="loading"
-          label="Login"
-          @click="loginSubmit"
-          v-show="!loading"
-          aria-label="Login"
-        />
-        <q-btn
-          style="width: 16em"
-          color="secondary"
-          size="sm"
-          :disabled="loading"
-          label="Go to sign up page"
-          @click="gotoSignup"
-          v-show="!loading"
-          aria-label="Go to sign up page"
-        />
+      <div class="row">
+        <div class="q-mt-lg col-xs-12 col-md-5 row justify-start">
+          <q-btn
+            class="col"
+            color="primary"
+            size="sm"
+            :disabled="loading"
+            label="Login"
+            @click="loginSubmit"
+            v-show="!loading"
+            aria-label="Login"
+          />
+        </div>
+        <div class="q-mt-lg col-xs-12 offset-md-2 col-md-5 row justify-end">
+          <q-btn
+            class="col"
+            color="secondary"
+            size="sm"
+            :disabled="loading"
+            label="Go to sign up page"
+            @click="gotoSignup"
+            v-show="!loading"
+            aria-label="Go to sign up page"
+          />
+        </div>
       </div>
       <div class="row justify-center">
         <img

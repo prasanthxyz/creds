@@ -34,27 +34,31 @@
       >
         Should be same as the password
       </div>
-      <div class="row col q-mt-lg justify-between">
-        <q-btn
-          style="width: 16em"
-          color="secondary"
-          size="sm"
-          :disabled="loading"
-          label="Sign Up"
-          @click="signupSubmit"
-          v-show="!loading"
-          aria-label="Sign up"
-        />
-        <q-btn
-          style="width: 16em"
-          color="primary"
-          size="sm"
-          :disabled="loading"
-          label="Go to login page"
-          @click="gotoLogin"
-          v-show="!loading"
-          aria-label="Go to login page"
-        />
+      <div class="row">
+        <div class="q-mt-lg col-xs-12 col-md-5 row justify-start">
+          <q-btn
+            class="col"
+            color="secondary"
+            size="sm"
+            :disabled="loading"
+            label="Sign up"
+            @click="signupSubmit"
+            v-show="!loading"
+            aria-label="Sign up"
+          />
+        </div>
+        <div class="q-mt-lg col-xs-12 offset-md-2 col-md-5 row justify-end">
+          <q-btn
+            class="col"
+            color="primary"
+            size="sm"
+            :disabled="loading"
+            label="Go to login page"
+            @click="gotoLogin"
+            v-show="!loading"
+            aria-label="Go to login page"
+          />
+        </div>
       </div>
       <div class="row justify-center">
         <img
@@ -106,7 +110,10 @@ export default {
           Notify.create({
             type: "positive",
             position: "top",
-            message: "Successfully created user: '" + data.username + "'.",
+            message:
+              "Successfully created user: '" +
+              data.username +
+              "'. Please proceed to login.",
           });
           router.push("/login");
         },

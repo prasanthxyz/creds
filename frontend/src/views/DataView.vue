@@ -1,6 +1,8 @@
 <template>
   <q-page class="flex justify-center q-pa-md">
-    <div class="row" v-if="isDataLoadFailed">Error in loading data.</div>
+    <div class="row" v-if="isDataLoadFailed">
+      Error in loading data, please check your network connection.
+    </div>
     <div class="row" v-else-if="!isDataLoaded">Loading...</div>
     <div class="column" style="width: 100%" v-else>
       <div class="row">
