@@ -7,7 +7,7 @@
           <q-input dense type="text" v-model="username" label="Username" />
         </div>
       </div>
-      <div class="row justify-end" v-show="submitted && !username">
+      <div class="row justify-end text-red" v-show="submitted && !username">
         Username is required
       </div>
       <div class="row q-mt-sm">
@@ -15,7 +15,7 @@
           <q-input dense type="password" v-model="password" label="Password" />
         </div>
       </div>
-      <div class="row justify-end" v-show="submitted && !password">
+      <div class="row justify-end text-red" v-show="submitted && !password">
         Password is required
       </div>
       <div class="row">
@@ -35,7 +35,9 @@
           />
         </div>
       </div>
-      <div class="row justify-center q-mt-md" v-if="error">{{ error }}</div>
+      <div class="row justify-center q-mt-md text-red" v-if="error">
+        {{ error }}
+      </div>
     </div>
   </q-page>
 </template>
