@@ -46,7 +46,9 @@ function decryptDataToSectionsList(data) {
  */
 function encryptSectionInfoToContent(sectionInfo) {
   if (!_dataValidator.isValidSection(sectionInfo, true)) {
-    throw new Error("Can't encrypt: sectionInfo object not valid.");
+    throw new Error(
+      "Encryption error: invalid section. Please validate all fields."
+    );
   }
 
   sectionInfo = _dataValidator.removeInvalidEntries(sectionInfo);
@@ -64,7 +66,7 @@ function encryptSectionInfoToContent(sectionInfo) {
  */
 function encrypt(plainText, secretKey) {
   if (!secretKey) {
-    throw new Error("Invalid key.");
+    throw new Error("Invalid Secret Key.");
   }
   return CryptoJS.AES.encrypt(plainText, secretKey).toString();
 }

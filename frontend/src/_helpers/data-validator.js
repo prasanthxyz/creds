@@ -14,14 +14,12 @@ export const _dataValidator = {
  */
 function isValidSection(sectionInfo, dontCheckCreds = false) {
   if (!sectionInfo["name"]) {
-    console.log("name issue", sectionInfo);
     return false;
   }
 
   if (
     Object.prototype.toString.call(sectionInfo["creds"]) !== "[object Array]"
   ) {
-    console.log("creds issue");
     return false;
   }
 
@@ -31,7 +29,6 @@ function isValidSection(sectionInfo, dontCheckCreds = false) {
 
   for (const cred of sectionInfo["creds"]) {
     if (!isValidEntry(cred)) {
-      console.log("entry issue", cred);
       return false;
     }
   }

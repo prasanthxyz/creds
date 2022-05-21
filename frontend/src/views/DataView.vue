@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import { Notify } from "quasar";
 import { webService, HttpMethod } from "../_services";
 import { _crypto } from "../_helpers";
 import SectionDisplay from "../components/SectionDisplay.vue";
@@ -157,12 +158,10 @@ export default {
           this.backendData = data;
           this.isDataLoaded = true;
           this.isDataLoadFailed = false;
-          console.log("Data Loaded");
         })
-        .catch((error) => {
+        .catch(() => {
           this.isDataLoaded = true;
           this.isDataLoadFailed = true;
-          console.error(error.message);
         });
     },
     /**
@@ -205,16 +204,28 @@ export default {
         webService
           .req(HttpMethod.POST, "/data/", { content: content })
           .then((data) => {
-            console.log(data); // TODO: Show something else here like a pop-up
+            Notify.create({
+              type: "positive",
+              position: "top",
+              message: "Created section for " + sectionInfo.name + ".",
+            });
             this.newSections.splice(index, 1);
             this.backendData.push(data);
             this.decryptDataAndLoadIntoSections();
           })
-          .catch((error) => {
-            console.error(error.message); // TODO: Show something else here like a pop-up
+          .catch(() => {
+            Notify.create({
+              type: "negative",
+              position: "top",
+              message: "Could not create section: something went wrong.",
+            });
           });
       } catch (error) {
-        console.error(error.message); // TODO: Show something else here like a pop-up
+        Notify.create({
+          type: "negative",
+          position: "top",
+          message: error.message,
+        });
       }
     },
     /**
@@ -231,8 +242,12 @@ export default {
         const content = _crypto.encryptSectionInfoToContent(updatedSectionInfo);
         webService
           .req(HttpMethod.PATCH, `/data/${id}/`, { content: content })
-          .then((data) => {
-            console.log(data); // TODO: Show something else here like a pop-up
+          .then(() => {
+            Notify.create({
+              type: "positive",
+              position: "top",
+              message: `Updated section ${updatedSectionInfo.name}`,
+            });
 
             // Update this.backendData with the new content
             const _index = this.findIndex(id);
@@ -241,11 +256,19 @@ export default {
               this.decryptDataAndLoadIntoSections();
             }
           })
-          .catch((error) => {
-            console.error(error.message); // TODO: Show something else here like a pop-up
+          .catch(() => {
+            Notify.create({
+              type: "negative",
+              position: "top",
+              message: `Could not update ${updatedSectionInfo.name}: something went wrong.`,
+            });
           });
       } catch (error) {
-        console.error(error.message); // TODO: Show something else here like a pop-up
+        Notify.create({
+          type: "negative",
+          position: "top",
+          message: error.message,
+        });
       }
     },
     /**
@@ -258,8 +281,13 @@ export default {
 
       webService
         .req(HttpMethod.DELETE, `/data/${id}/`)
-        .then((data) => {
-          console.log(data); // TODO: Show something else here like a pop-up
+        .then(() => {
+          Notify.create({
+            icon: "announcement",
+            type: "warning",
+            position: "top",
+            message: "Section deleted.",
+          });
 
           // Remove the entry from this.backendData
           const _index = this.findIndex(id);
@@ -268,8 +296,12 @@ export default {
             this.decryptDataAndLoadIntoSections();
           }
         })
-        .catch((error) => {
-          console.error(error.message); // TODO: Show something else here like a pop-up
+        .catch(() => {
+          Notify.create({
+            type: "negative",
+            position: "top",
+            message: "Could not delete section: something went wrong.",
+          });
         });
     },
     /**

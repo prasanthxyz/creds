@@ -91,6 +91,15 @@ export default {
     this.originalSectionInfo = _.cloneDeep(this.sectionInfo);
     this.displaySectionInfo = _.cloneDeep(this.sectionInfo);
   },
+  watch: {
+    sectionInfo: {
+      immediate: true,
+      handler(newSectionInfo) {
+        this.originalSectionInfo = _.cloneDeep(newSectionInfo);
+        this.displaySectionInfo = _.cloneDeep(newSectionInfo);
+      },
+    },
+  },
   methods: {
     handleSave() {
       if (this.isNewSection) {

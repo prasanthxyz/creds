@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { Quasar } from "quasar";
+import { Quasar, Notify } from "quasar";
 import { registerSW } from "virtual:pwa-register";
 import App from "./App.vue";
 import router from "./router";
@@ -22,7 +22,9 @@ const app = createApp(App);
 
 app.use(router);
 app.use(Quasar, {
-  plugins: {},
+  plugins: {
+    Notify,
+  },
 });
 
 app.mount("#app");
